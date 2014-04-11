@@ -2,41 +2,50 @@
 
 Arduino and Processing Serial Link
 PA - Arduino Side
-Version 0.1
+Version 0.2
 
 Provides a serial link, sending and receiving, between a computer running Processing and an Arduino.
 
 Behavior:
-Broadcasts byte 255 until it hears a reply. Then, listens for incoming bytes, and sends them back.
-
-establishCOntact() borrowed from http://arduino.cc/en/Tutorial/SerialCallResponse
+Listens for incoming bytes, and sends them back.
+Tracks status of serial link with a boolean and the LED.
 
 */
+
+// Serial variables
+boolean SerialStatus = false; // "true" indicates the link is functional
+int SerialStatusTimer = 0; // holds the value of millis() when the last incoming byte was recieved
+int SerialStatusTimeout = 1000; // time after which Serial is considered diconnected, in milliseconds
+
+// LED variable
+int led = 13;
 
 
 void setup(){
   Serial.begin(115200); // open the serial port
-  establishContact(); // connect with Processing
+  
+  pinMode(led, OUTPUT);  // initialize the LED pin
+  digitalWrite(led, LOW);   // turn the LED off
+
 } //setup()
 
 
 void loop(){
-  // do nothing
+
+  // check serial link status
+  if (SerialStatusTimeout < millis() - SerialStatusTimer) {
+    SerialStatus = false;
+    digitalWrite(led, LOW);   // turn the LED off
+  } 
+  
 } //loop()
-
-
-// Broadcasts 255 until serial data is received
-void establishContact() {
-  while (Serial.available() <= 0) {
-    Serial.write( (byte)255 );
-    delay(100);
-  }
-}
 
 
 // Called after each execution of loop()
 // if there is serial data availble
 void serialEvent(){
-  // send the byte back
-  Serial.write(Serial.read());
+  Serial.write(Serial.read()); // send the byte back
+  SerialStatus = true;
+  SerialStatusTimer = millis();
+  digitalWrite(led, HIGH);   // turn the LED on
 } // serialEvent()

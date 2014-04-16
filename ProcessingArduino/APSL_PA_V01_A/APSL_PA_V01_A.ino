@@ -2,7 +2,7 @@
 
 Arduino and Processing Serial Link
 PA - Arduino Side
-Version 0.2
+Version 0.1
 
 Provides a serial link, sending and receiving, between a computer running Processing and an Arduino.
 

@@ -7,7 +7,7 @@ Version 0.1
 Provides a serial link, sending and receiving, between a computer running Processing and an Arduino.
 
 Behavior:
-Listens for incoming bytes, and sends them back.
+Listens for incoming bytes on Serial, and sends them back.
 Tracks status of serial link with a boolean and the LED.
 
 */

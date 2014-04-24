@@ -14,8 +14,8 @@ Tracks status of serial link with a boolean and the LED.
 
 // Serial variables
 boolean SerialStatus = false; // "true" indicates the link is functional
-int SerialStatusTimer = 0; // holds the value of millis() when the last incoming byte was recieved
-int SerialStatusTimeout = 1000; // time after which Serial is considered diconnected, in milliseconds
+unsigned long SerialStatusTimer = 0; // holds the value of millis() when the last incoming byte was recieved
+unsigned long SerialStatusTimeout = 1000; // time after which Serial is considered diconnected, in milliseconds
 
 // LED variable
 int led = 13;
@@ -35,8 +35,11 @@ void loop(){
   // check serial link status
   if (SerialStatusTimeout < millis() - SerialStatusTimer) {
     SerialStatus = false;
-    digitalWrite(led, LOW);   // turn the LED off
-  } 
+  }
+  
+  // set serial status LED
+  if(SerialStatus) digitalWrite(led, HIGH);   // turn the LED on
+  else digitalWrite(led, LOW);   // turn the LED off
   
 } //loop()
 
@@ -47,5 +50,4 @@ void serialEvent(){
   Serial.write(Serial.read()); // send the byte back
   SerialStatus = true;
   SerialStatusTimer = millis();
-  digitalWrite(led, HIGH);   // turn the LED on
 } // serialEvent()

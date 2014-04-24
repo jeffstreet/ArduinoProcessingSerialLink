@@ -58,7 +58,7 @@ int checksum = 0;
 void setup(){
   
  // open the serial port
- serial = new Serial(this, "/dev/tty.usbmodemfa131", 115200); //MEGA2560 or UNO
+ serial = new Serial(this, "/dev/tty.usbmodem111", 115200); //MEGA2560 or UNO
  serial.clear();
 
  frameRate(10); // max number of times draw() is executed per second
@@ -82,6 +82,9 @@ void draw(){
   serialSendPingPacket();
   
 } //draw()
+
+// *****
+
 
 // Called after each execution of draw()
 // if there is serial data availble

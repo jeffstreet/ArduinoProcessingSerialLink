@@ -58,13 +58,19 @@ int checksum = 0;
 void setup(){
   
  // open the serial port
- serial = new Serial(this, "/dev/tty.usbmodem111", 115200); //MEGA2560 or UNO
+ serial = new Serial(this, "/dev/tty.usbmodemfd121", 115200); // MEGA2560 or UNO
+ // serial = new Serial(this, "/dev/tty.usbserial-A900ac9j", 115200); // MEGA
+
  serial.clear();
 
  frameRate(10); // max number of times draw() is executed per second
-
+ 
+ println("Waiting for Arduino to initialize");
+ while (millis() < 2000){}
+ 
  println("setup() complete");
 } //setup()
+
 
 // *****
 
@@ -82,6 +88,7 @@ void draw(){
   serialSendPingPacket();
   
 } //draw()
+
 
 // *****
 

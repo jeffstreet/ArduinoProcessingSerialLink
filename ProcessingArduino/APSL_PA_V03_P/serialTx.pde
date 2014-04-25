@@ -1,6 +1,7 @@
 
 // sends a ping packet 
 void serialSendPingPacket(){
+  if (verbose == true) println("serialSendPingPacket()");
   byte[] byteArray = { 1 , byte(millis()%255) };
   serialWritePayloadAsPacket(byteArray);
 }

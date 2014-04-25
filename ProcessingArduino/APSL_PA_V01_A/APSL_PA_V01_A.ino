@@ -8,7 +8,7 @@ Provides a serial link, sending and receiving, between a computer running Proces
 
 Behavior:
 Listens for incoming bytes on Serial, and sends them back.
-Tracks status of serial link with a boolean and the LED.
+Tracks status of serial link with a boolean and the LED on pin 13.
 
 */
 
@@ -21,13 +21,19 @@ unsigned long SerialStatusTimeout = 1000; // time after which Serial is consider
 int led = 13;
 
 
+// *****
+
+
 void setup(){
-  Serial.begin(115200); // open the serial port
+  Serial.begin(115200); // open Serial
   
   pinMode(led, OUTPUT);  // initialize the LED pin
   digitalWrite(led, LOW);   // turn the LED off
 
 } //setup()
+
+
+// *****
 
 
 void loop(){
@@ -42,6 +48,9 @@ void loop(){
   else digitalWrite(led, LOW);   // turn the LED off
   
 } //loop()
+
+
+// *****
 
 
 // Called after each execution of loop()

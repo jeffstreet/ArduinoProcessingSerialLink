@@ -13,43 +13,43 @@ Uses state machine to handle incoming packets.
 Tracks status of incoming serial traffic as boolean.
 
 Packet Format
-  StartByte1
-  StartByte2
-  LengthByte = 2 + number of payload bytes
-  TypeByte: specifies the kind of packet.
-  Payload Bytes
-  CheckByte
+  Start1
+  Start2
+  Length = TypeByte + number of payload bytes + CheckByte
+  Type: specifies the kind of packet
+  Payload (several bytes) 
+  Checksum
   
 TypeByte Key, Outgoing Packets
   1: Ping packet: Payload is one byte, value of millis()%255
 
 TypeByte Key, Incoming Packets
   0: Error packet
-  1: Ping packet: Payload is one byte, echo of incoming Ping payload
+  1: Ping packet: Payload is one byte, value of Processing millis()%255 when sent
 
 */
 
 
 import processing.serial.*;
 
-// serial diagnostic
+// diagnostic variables
 boolean verbose = true;
 int good = 0; // the number of good exchanges
 int error = 0; // the number of errors
 
-// serial setup
+// serial variables
 Serial serial; // initialize the serial port
 boolean serialStatus = false; // "true" indicates the link is functional
 int serialStatusTimer = 0; // holds the value of millis() when the last incoming byte was recieved
 int serialStatusTimeout = 1000; // time after which Serial is considered diconnected, in milliseconds
-byte start1 = byte(113);
-byte start2 = byte(42);
-int state = 0;
+byte serialStart1 = byte(113);
+byte serialStart2 = byte(42);
+int serialState = 0;
+int[] serialPayloadIn = new int[10];
 int inLength = 0;
-int[] payloadIn = new int[10];
-int payloadInLength = 3;
-int payloadInIndex = 0;
-int checksum = 0;
+int serialPayloadInLength = 0;
+int serialPayloadInIndex = 0;
+int serialChecksum = 0;
 
 
 // *****

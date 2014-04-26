@@ -32,12 +32,12 @@ void serialWritePayloadAsPacket(byte[] payload){
   if (verbose == true) print("serialWritePayloadAsPacket {");
   
   // send start bytes
-  serial.write(start1);
-  serial.write(start2);
+  serial.write(serialStart1);
+  serial.write(serialStart2);
   if (verbose == true){ 
-    print(byte(start1));
+    print(byte(serialStart1));
     print(" ");
-    print(byte(start2));
+    print(byte(serialStart2));
     print(" ");
   }
 
@@ -49,11 +49,11 @@ void serialWritePayloadAsPacket(byte[] payload){
   }
 
  // send payload and compute checksum
- int checksum = 0;
+ int serialChecksum = 0;
  for (int i = 0; i < payload.length; i++){
 
     serial.write(payload[i]);
-    checksum+=payload[i];
+    serialChecksum+=payload[i];
     if (verbose == true){
       print(payload[i]);
       print(" ");
@@ -61,9 +61,9 @@ void serialWritePayloadAsPacket(byte[] payload){
   }
   
   // send checksum
-  serial.write(checksum%255);
+  serial.write(serialChecksum%255);
   if (verbose == true){
-    print(checksum%255);
+    print(serialChecksum%255);
     println("}");
   }
   

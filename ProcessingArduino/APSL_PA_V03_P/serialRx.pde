@@ -1,4 +1,4 @@
-// Called after each execution of draw()
+// Called by serialEvent() after each execution of draw()
 // if there is serial data availble
 void serialRxReader(){
   if (verbose == true) println("serialRxReader");
@@ -14,13 +14,13 @@ void serialRxReader(){
     print("Rx ");
     println(temp);
     print("State Start: ");
-    println(state);
+    println(serialState);
   }
     
-    switch(state) {
+    switch(serialState) {
       case 0: // Looking for S1
-        if ((byte)temp == start1) {
-          state = 1;
+        if ((byte)temp == serialStart1) {
+          serialState = 1;
           if (verbose == true) println("Got S1");
         }
         else {
@@ -31,8 +31,8 @@ void serialRxReader(){
         }
         break;
       case 1: // Looking for S2
-        if ((byte)temp == start2) {
-          state = 2;
+        if ((byte)temp == serialStart2) {
+          serialState = 2;
           if (verbose == true) println("Got S2");
         }
         else {
@@ -42,43 +42,43 @@ void serialRxReader(){
         break;
       case 2: // Reading length
         if (temp>2){ //check for valid length
-          payloadInLength = temp;
-          state = 3;
+          serialPayloadInLength = temp;
+          serialState = 3;
           if (verbose == true){
             print("Length is: ");
-            println(payloadInLength);
+            println(serialPayloadInLength);
           }
         }
         else {
           serialRxReset();
           if (verbose == true) {
             print("Length error: ");
-            println (payloadInLength);
+            println (serialPayloadInLength);
           }
         }
         break;
       case 3: // Reading payload
-        payloadIn[payloadInIndex] = temp;
-        payloadInIndex++;
+        serialPayloadIn[serialPayloadInIndex] = temp;
+        serialPayloadInIndex++;
         if (verbose == true){
           print("Reading payload: ");
-          print(payloadInIndex);
+          print(serialPayloadInIndex);
           print(" of ");
-          println(payloadInLength);
+          println(serialPayloadInLength);
         }
-        if( payloadInIndex >= payloadInLength) {
+        if( serialPayloadInIndex >= serialPayloadInLength) {
           
           // compute checksums
           if (verbose == true) print("Checksum: ");
-          for (int i=0; i<payloadInLength-1; i++){
-            checksum += payloadIn[i];
+          for (int i=0; i<serialPayloadInLength-1; i++){
+            serialChecksum += serialPayloadIn[i];
           }
-          checksum = checksum%255;
-          if (verbose == true) println(checksum);
+          serialChecksum = serialChecksum%255;
+          if (verbose == true) println(serialChecksum);
 
           
           // compare the checksums
-          if ( checksum == payloadIn[payloadInLength-1] ){
+          if ( serialChecksum == serialPayloadIn[serialPayloadInLength-1] ){
             if (verbose == true) println("Well formed packet");
             good ++;
             serialRxPacketHandler();
@@ -98,7 +98,7 @@ void serialRxReader(){
     }
     if (verbose == true){
       print("State End: ");
-      println(state);
+      println(serialState);
     }
     
   }
@@ -109,38 +109,38 @@ void serialRxReader(){
 
 // resets the state machine and sends a new packet
 void serialRxReset(){ 
-  state=0;
-  payloadInIndex=0;
-  checksum = 0;
+  serialState=0;
+  serialPayloadInIndex=0;
+  serialChecksum = 0;
   if (verbose == true) println("serialRxReset");
 }// serialRxReset()
 
 // *****
 
 
-// takes action on the packet stored in payloadIn[]
+// takes action on the packet stored in serialPayloadIn[]
 void serialRxPacketHandler(){
   if (verbose == true) print("Packet Type: ");
   
   // deal with the payload of the packet
-  switch(payloadIn[0]) { //first byte is the packet type
+  switch(serialPayloadIn[0]) { //first byte is the packet type
       case 0: // Error Packet
         // This is how the arduino comunicates errors to Processing
         print("Error: ");
-        switch(payloadIn[1]) { //error type byte
+        switch(serialPayloadIn[1]) { //error type byte
           case 1:
             println("Type 1");
             break;
           default:
             print("Unknown error type");
-            println(payloadIn[0]);            
+            println(serialPayloadIn[0]);            
             break;
         } // Error type switch
         break;
   
       case 1: // Ping packet
         print("Ping : ");
-        println(millis()%255 - payloadIn[1]);
+        println(millis()%255 - serialPayloadIn[1]);
         print("Good/Error = ");
         print(good);
         print("/");
@@ -149,7 +149,7 @@ void serialRxPacketHandler(){
         
       default:
         print("Packet type error: ");
-        println(payloadIn[0]);
+        println(serialPayloadIn[0]);
         break;
   } // Packet type switch
   

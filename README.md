@@ -11,8 +11,8 @@ Written and tested with:
 ## Processing - Arduino
 Provides a serial link, sending and receiving, between a computer running Processing and an Arduino.
 
-### Arduino Side - 0.1
-Listens for incoming bytes, and sends them back. Tracks status of serial link with a boolean and the LED on pin 13.
+### Arduino Side - 0.2
+Uses state machine to handle incoming packets. Example ping packets implemented. racks status of serial link with a boolean and the SerialStatusLED on pin 13. Tracks status of Arduino serial actions with LED on pins 47, 49, 51, 53.
 
 ### Processing Side - 0.3
 Broadcasts Ping packets with time stamp. Prints elapsed time for roundtrip. Uses state machine to handle incoming packets. Tracks status of incoming serial traffic as boolean.

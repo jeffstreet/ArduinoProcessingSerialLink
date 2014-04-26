@@ -57,9 +57,10 @@ int serialChecksum = 0;
 
 void setup(){
   
- // open the serial port
- serial = new Serial(this, "/dev/tty.usbmodemfd121", 115200); // MEGA2560 or UNO
- // serial = new Serial(this, "/dev/tty.usbserial-A900ac9j", 115200); // MEGA
+ // serial setup
+ serial = new Serial(this, "/dev/tty.usbserial-A600e1oa", 115200); // XBee
+ // serial = new Serial(this, "/dev/tty.usbmodemfd121", 115200); // MEGA2560 or UNO
+ 
 
  serial.clear();
 

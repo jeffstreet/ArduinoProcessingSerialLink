@@ -16,11 +16,3 @@ Uses state machine to handle incoming packets. Example ping packets implemented.
 
 ### Processing Side - 0.3
 Broadcasts Ping packets with time stamp. Prints elapsed time for roundtrip. Uses state machine to handle incoming packets. Tracks status of incoming serial traffic as boolean.
-
-
-## Arduino - Arduino (to be created in a future commit)
-Two Arduinos. One is the master and the other is the slave.
-
-
-## Processing - Arduino - Arduino  (to be created in a future commit)
-Processing and two Arduinos in a daisychain configuration. Different serial ports are used. Processing and Arduino 1 are on a separate serial link from Arduino 1 and Arduino 2.
